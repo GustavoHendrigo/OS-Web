@@ -1,0 +1,131 @@
+<div class="card" *ngIf="order; else loadingState">
+  <header class="detail-header">
+    <div>
+      <h2>OS {{ order.code }}</h2>
+      <p>Cliente: <strong>{{ order.clientName }}</strong></p>
+      <p>Veículo: {{ order.vehicle }}</p>
+      <p>Criada em {{ order.createdAt | date:'short' }} · Atualizada em {{ order.updatedAt | date:'short' }}</p>
+    </div>
+    <div class="actions" *ngIf="authService.hasRole(['admin'])">
+      <label>
+        Status
+        <select [ngModel]="order.status" (ngModelChange)="updateStatus($event)">
+          <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </label>
+      <button class="button secondary" type="button" (click)="toggleApproval()">
+        {{ order.approved ? 'Reverter aprovação' : 'Marcar como aprovada' }}
+      </button>
+    </div>
+  </header>
+
+  <section class="print-area">
+    <div class="print-header">
+      <div>
+        <h3>Resumo do pedido</h3>
+        <p>Situação: <span class="badge info">{{ formatStatus(order.status) }}</span></p>
+        <p>Aprovação do cliente: <strong>{{ order.approved ? 'Aprovado' : 'Pendente' }}</strong></p>
+      </div>
+      <div>
+        <p><strong>Cliente:</strong> {{ order.clientName }}</p>
+        <p><strong>Veículo:</strong> {{ order.vehicle }}</p>
+        <p><strong>Data agendada:</strong> {{ order.scheduledDate ? (order.scheduledDate | date) : 'N/D' }}</p>
+      </div>
+    </div>
+
+    <section>
+      <h4>Mão de obra</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Horas</th>
+            <th>Valor hora</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let labor of order.labor">
+            <td>{{ labor.description }}</td>
+            <td>{{ labor.hours }}</td>
+            <td>{{ labor.rate | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+            <td>{{ labor.hours * labor.rate | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+          </tr>
+          <tr *ngIf="!order.labor.length">
+            <td colspan="4" class="empty">Nenhum lançamento de mão de obra cadastrado.</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="3">Total de mão de obra</th>
+            <th>{{ laborTotal() | currency:'BRL':'symbol-narrow':'1.2-2' }}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <section>
+      <h4>Peças</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Valor unitário</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let part of order.parts">
+            <td>{{ part.description }}</td>
+            <td>{{ part.quantity }}</td>
+            <td>{{ part.unitPrice | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+            <td>{{ part.quantity * part.unitPrice | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+          </tr>
+          <tr *ngIf="!order.parts.length">
+            <td colspan="4" class="empty">Nenhuma peça vinculada a esta OS.</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="3">Total de peças</th>
+            <th>{{ partsTotal() | currency:'BRL':'symbol-narrow':'1.2-2' }}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <section class="totals">
+      <div class="total-card">
+        <span>Mão de obra</span>
+        <strong>{{ laborTotal() | currency:'BRL':'symbol-narrow':'1.2-2' }}</strong>
+      </div>
+      <div class="total-card">
+        <span>Peças</span>
+        <strong>{{ partsTotal() | currency:'BRL':'symbol-narrow':'1.2-2' }}</strong>
+      </div>
+      <div class="total-card grand-total">
+        <span>Total geral</span>
+        <strong>{{ order.totalCost | currency:'BRL':'symbol-narrow':'1.2-2' }}</strong>
+      </div>
+    </section>
+
+    <section class="notes">
+      <h4>Descrição do problema</h4>
+      <p>{{ order.description }}</p>
+      <h4>Observações do mecânico</h4>
+      <p>{{ order.mechanicNotes || 'Sem observações adicionais.' }}</p>
+    </section>
+  </section>
+
+  <div class="button-bar">
+    <button class="button" type="button" (click)="print()">Imprimir nota</button>
+  </div>
+</div>
+
+<ng-template #loadingState>
+  <div class="card">
+    <p *ngIf="loading">Carregando OS...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+  </div>
+</ng-template>

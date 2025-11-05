@@ -1,0 +1,84 @@
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.detail-header h2 {
+  margin-bottom: 0.25rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.actions select {
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.65rem;
+  border: 1px solid var(--border);
+}
+
+.print-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.print-header h3 {
+  margin: 0;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.total-card {
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.total-card span {
+  color: var(--muted);
+}
+
+.total-card strong {
+  font-size: 1.5rem;
+}
+
+.total-card.grand-total {
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.notes {
+  display: grid;
+  gap: 1rem;
+}
+
+.notes p {
+  margin: 0;
+  background: rgba(248, 250, 252, 0.8);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+}
+
+.error {
+  color: var(--danger);
+}

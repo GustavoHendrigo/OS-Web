@@ -1,0 +1,15 @@
+# dependências
+node_modules/
+
+# build Angular
+workshop-management/dist/
+workshop-management/.angular/
+workshop-management/out-tsc/
+workshop-management/coverage/
+
+# ambientes
+workshop-management/.env
+
+# Python
+__pycache__/
+backend/workshop.db

@@ -1,0 +1,26 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <h1>Oficina Inteligente</h1>
+    <p class="subtitle">Acesse com um usuário pré-configurado:</p>
+    <ul class="preset-users">
+      <li *ngFor="let user of predefinedUsers">
+        <strong>{{ user.username }}</strong> / {{ user.password }}<br />
+        <small>{{ user.role }}</small>
+      </li>
+    </ul>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Usuário
+        <input type="text" formControlName="username" placeholder="Informe seu usuário" />
+      </label>
+      <label>
+        Senha
+        <input type="password" formControlName="password" placeholder="Informe sua senha" />
+      </label>
+      <button class="button" type="submit" [disabled]="loading">
+        {{ loading ? 'Entrando...' : 'Entrar' }}
+      </button>
+      <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    </form>
+  </div>
+</div>

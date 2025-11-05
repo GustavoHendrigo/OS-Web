@@ -1,0 +1,80 @@
+<div class="card">
+  <header class="card-header">
+    <h2 class="section-title">Estoque</h2>
+    <div class="actions">
+      <input type="search" placeholder="Buscar itens" [(ngModel)]="searchTerm" (ngModelChange)="loadItems()" />
+      <button class="button" type="button" (click)="toggleForm()">
+        {{ formVisible ? 'Fechar formulário' : 'Novo item' }}
+      </button>
+    </div>
+  </header>
+
+  <p *ngIf="error" class="error">{{ error }}</p>
+  <p *ngIf="loading">Carregando estoque...</p>
+
+  <table class="table" *ngIf="!loading && items.length">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Código</th>
+        <th>Qtd.</th>
+        <th>Mínimo</th>
+        <th>Valor unitário</th>
+        <th>Localização</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items" [class.low-stock]="isLowStock(item)">
+        <td>{{ item.name }}</td>
+        <td>{{ item.partNumber || '—' }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.minimumStock ?? '—' }}</td>
+        <td>{{ item.unitPrice | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+        <td>{{ item.location || '—' }}</td>
+        <td>
+          <button class="button secondary" type="button" (click)="toggleForm(item)">Editar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="!loading && !items.length" class="empty">Nenhum item encontrado.</p>
+</div>
+
+<div class="card" *ngIf="formVisible">
+  <h3>{{ editingItem ? 'Editar item' : 'Cadastrar item' }}</h3>
+  <p *ngIf="saveError" class="error">{{ saveError }}</p>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-grid columns-2">
+      <label>
+        Descrição
+        <input type="text" formControlName="name" />
+      </label>
+      <label>
+        Código / Referência
+        <input type="text" formControlName="partNumber" />
+      </label>
+      <label>
+        Quantidade em estoque
+        <input type="number" min="0" formControlName="quantity" />
+      </label>
+      <label>
+        Estoque mínimo
+        <input type="number" min="0" formControlName="minimumStock" />
+      </label>
+      <label>
+        Valor unitário (R$)
+        <input type="number" min="0" step="0.01" formControlName="unitPrice" />
+      </label>
+      <label>
+        Localização
+        <input type="text" formControlName="location" />
+      </label>
+    </div>
+    <div class="button-bar">
+      <button class="button" type="submit" [disabled]="saving">
+        {{ saving ? 'Salvando...' : 'Salvar item' }}
+      </button>
+    </div>
+  </form>
+</div>

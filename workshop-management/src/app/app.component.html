@@ -1,0 +1,24 @@
+<div *ngIf="authService.isAuthenticated(); else loginLayout" class="app-shell">
+  <aside class="sidebar">
+    <h2>{{ title }}</h2>
+    <nav>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Painel</a>
+      <a routerLink="/ordens-servico" routerLinkActive="active" class="nav-link">Ordens de Serviço</a>
+      <a routerLink="/clientes" routerLinkActive="active" class="nav-link">Clientes</a>
+      <a routerLink="/estoque" routerLinkActive="active" class="nav-link">Estoque</a>
+    </nav>
+    <div class="sidebar-footer" *ngIf="authService.currentUser$ | async as user">
+      <div class="user-info">
+        <strong>{{ user.username }}</strong>
+        <span class="role">{{ user.role | titlecase }}</span>
+      </div>
+      <button class="button secondary" (click)="logout()">Sair</button>
+    </div>
+  </aside>
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+<ng-template #loginLayout>
+  <router-outlet></router-outlet>
+</ng-template>
