@@ -1,0 +1,20 @@
+<a routerLink="/ordens" class="back">← Voltar para lista</a>
+
+<section *ngIf="order(); else loading" class="order-detail">
+  <div class="order-info">
+    <h1>{{ order()?.code }} - {{ order()?.vehicle }}</h1>
+    <p>{{ order()?.description }}</p>
+    <div class="meta">
+      <span>Cliente: {{ order()?.clientName }}</span>
+      <span>Emissão: {{ order()?.createdAt | date: 'short' }}</span>
+      <span>Prazo: {{ order()?.promisedDate | date: 'shortDate' }}</span>
+      <span>Aprovação do cliente: {{ order()?.approvedByClient ? 'Sim' : 'Não' }}</span>
+    </div>
+  </div>
+
+  <app-order-summary *ngIf="order()" [order]="order()!"></app-order-summary>
+</section>
+
+<ng-template #loading>
+  <p>Carregando ordem...</p>
+</ng-template>

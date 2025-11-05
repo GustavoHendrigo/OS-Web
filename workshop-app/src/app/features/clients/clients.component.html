@@ -1,0 +1,35 @@
+<section class="clients">
+  <header class="clients__header">
+    <div>
+      <h1>Clientes</h1>
+      <p>Lista de clientes ativos da oficina.</p>
+    </div>
+    <form [formGroup]="filterForm" class="filters">
+      <input type="search" placeholder="Buscar por nome, contato ou veículo" formControlName="search" />
+    </form>
+  </header>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Contato</th>
+        <th>Email</th>
+        <th>Documento</th>
+        <th>Veículos</th>
+        <th>Observações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of clients()">
+        <td>{{ client.name }}</td>
+        <td>{{ client.phone }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.document }}</td>
+        <td>{{ client.vehicles }}</td>
+        <td>{{ client.notes || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="empty" *ngIf="clients().length === 0">Nenhum cliente encontrado.</p>
+</section>
