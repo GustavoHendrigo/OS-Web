@@ -1,0 +1,34 @@
+.no-print {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.summary-grid div {
+  background: rgba(15, 108, 189, 0.08);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.signatures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.company {
+  text-align: right;
+  color: var(--color-muted);
+}

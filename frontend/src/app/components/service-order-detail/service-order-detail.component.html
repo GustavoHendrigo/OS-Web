@@ -1,0 +1,117 @@
+<section *ngIf="order() as current; else loadingTpl">
+  <div class="no-print">
+    <a routerLink="/ordens-de-servico" class="outline">&larr; Voltar</a>
+    <button (click)="print()">Imprimir ordem</button>
+  </div>
+
+  <div class="print-view card">
+    <div class="print-header">
+      <div>
+        <h1>Ordem de Serviço {{ current.code }}</h1>
+        <p>Status: {{ current.statusLabel }}</p>
+      </div>
+      <div class="company">
+        <strong>OS Web Oficina</strong>
+        <p>CNPJ 00.000.000/0000-00</p>
+        <p>Rua das Oficinas, 123 - Centro</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Dados do cliente</h2>
+      <p><strong>Nome:</strong> {{ current.client?.name }}</p>
+      <p><strong>Telefone:</strong> {{ current.client?.phone }}</p>
+      <p><strong>Email:</strong> {{ current.client?.email }}</p>
+    </div>
+
+    <div class="section">
+      <h2>Veículo</h2>
+      <p>{{ current.vehicle.make }} {{ current.vehicle.model }} {{ current.vehicle.year }} - {{ current.vehicle.plate }}</p>
+      <p><strong>Problema relatado:</strong> {{ current.reportedIssue }}</p>
+      <p><strong>Observações:</strong> {{ current.notes || 'Sem observações adicionais.' }}</p>
+    </div>
+
+    <div class="section">
+      <h2>Mão de obra</h2>
+      <table class="print-table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Horas</th>
+            <th>Valor hora</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let service of current.services">
+            <td>{{ service.description }}</td>
+            <td>{{ service.hours }}</td>
+            <td>{{ formatMoney(service.rate) }}</td>
+            <td>{{ formatMoney(service.total) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" *ngIf="current.parts.length">
+      <h2>Peças utilizadas</h2>
+      <table class="print-table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Qtd</th>
+            <th>Valor unitário</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let part of current.parts">
+            <td>{{ part.description }}</td>
+            <td>{{ part.quantity }}</td>
+            <td>{{ formatMoney(part.unitPrice) }}</td>
+            <td>{{ formatMoney(part.total) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section summary">
+      <h2>Resumo financeiro</h2>
+      <div class="summary-grid">
+        <div>
+          <span>Mão de obra</span>
+          <strong>{{ formatMoney(current.summary.labor) }}</strong>
+        </div>
+        <div>
+          <span>Peças</span>
+          <strong>{{ formatMoney(current.summary.parts) }}</strong>
+        </div>
+        <div>
+          <span>Descontos</span>
+          <strong>{{ formatMoney(current.summary.discount) }}</strong>
+        </div>
+        <div>
+          <span>Total geral</span>
+          <strong>{{ formatMoney(current.summary.total) }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="signatures">
+      <div>
+        _______________________________________
+        <p>Assinatura do cliente</p>
+      </div>
+      <div>
+        _______________________________________
+        <p>Responsável técnico</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #loadingTpl>
+  <div class="card">
+    <p>Carregando dados da ordem...</p>
+  </div>
+</ng-template>

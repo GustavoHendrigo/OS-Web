@@ -1,0 +1,23 @@
+<div class="layout">
+  <nav class="sidebar">
+    <div class="brand">OS Web</div>
+    <div class="user-info">
+      <span>{{ authService.currentUser()?.name }}</span>
+      <small>{{ authService.currentUser()?.role | titlecase }}</small>
+    </div>
+    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Painel</a>
+    <a routerLink="/ordens-de-servico" routerLinkActive="active">Ordens de Serviço</a>
+    <a routerLink="/clientes" routerLinkActive="active" *ngIf="authService.hasRole('admin')">Clientes</a>
+    <a routerLink="/estoque" routerLinkActive="active" *ngIf="authService.hasRole('admin')">Estoque</a>
+    <button class="outline" (click)="logout()">Sair</button>
+  </nav>
+  <main class="content">
+    <header class="page-header">
+      <h1>Gestão de Oficina</h1>
+      <p>Sistema completo para controle de ordens, clientes e estoque.</p>
+    </header>
+    <section class="page-content">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

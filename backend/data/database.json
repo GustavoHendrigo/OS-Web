@@ -1,0 +1,133 @@
+{
+  "users": [
+    { "id": 1, "username": "admin", "password": "admin123", "name": "Administrador", "role": "admin" },
+    { "id": 2, "username": "mecanico", "password": "mecanico123", "name": "João Mecânico", "role": "mecanico" }
+  ],
+  "clients": [
+    {
+      "id": 1,
+      "name": "Carlos Almeida",
+      "phone": "(11) 99999-1111",
+      "email": "carlos.almeida@email.com",
+      "document": "123.456.789-00",
+      "vehicle": "Honda Civic 2018 - ABC1D23"
+    },
+    {
+      "id": 2,
+      "name": "Fernanda Souza",
+      "phone": "(11) 98888-2222",
+      "email": "fernanda.souza@email.com",
+      "document": "987.654.321-00",
+      "vehicle": "Jeep Compass 2020 - FGH2I34"
+    },
+    {
+      "id": 3,
+      "name": "Oficina Logística LTDA",
+      "phone": "(11) 97777-3333",
+      "email": "contato@oficinalogistica.com",
+      "document": "12.345.678/0001-00",
+      "vehicle": "Frota utilitários"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Óleo 5W30 Sintético",
+      "sku": "OLEO-5W30",
+      "quantity": 25,
+      "minimumQuantity": 10,
+      "unitPrice": 65.9,
+      "location": "Prateleira A1",
+      "supplier": "LubMax Distribuidora"
+    },
+    {
+      "id": 2,
+      "name": "Filtro de ar Honda Civic",
+      "sku": "FILTRO-CIVIC",
+      "quantity": 8,
+      "minimumQuantity": 5,
+      "unitPrice": 48.5,
+      "location": "Prateleira B3",
+      "supplier": "AutoPeças Brasil"
+    },
+    {
+      "id": 3,
+      "name": "Pastilha de freio dianteira",
+      "sku": "PAST-FREIO",
+      "quantity": 12,
+      "minimumQuantity": 6,
+      "unitPrice": 189.9,
+      "location": "Prateleira C2",
+      "supplier": "Frenotec"
+    },
+    {
+      "id": 4,
+      "name": "Scanner OBD II",
+      "sku": "SCANNER-OBD",
+      "quantity": 4,
+      "minimumQuantity": 2,
+      "unitPrice": 1200,
+      "location": "Sala de equipamentos",
+      "supplier": "TechTools"
+    }
+  ],
+  "serviceOrders": [
+    {
+      "id": 1,
+      "code": "OS-2024-0001",
+      "clientId": 1,
+      "vehicle": { "make": "Honda", "model": "Civic", "year": 2018, "plate": "ABC1D23" },
+      "reportedIssue": "Luz da injeção acesa e ruído no freio dianteiro.",
+      "notes": "Cliente autorizou troca das pastilhas.",
+      "status": "em_andamento",
+      "services": [
+        { "description": "Diagnóstico eletrônico", "hours": 1.5, "rate": 150, "total": 225 },
+        { "description": "Troca de pastilhas de freio", "hours": 2, "rate": 150, "total": 300 }
+      ],
+      "parts": [
+        { "inventoryItemId": 3, "description": "Pastilha de freio dianteira", "quantity": 1, "unitPrice": 189.9, "total": 189.9 }
+      ],
+      "summary": { "labor": 525, "parts": 189.9, "discount": 0, "total": 714.9 },
+      "createdAt": "2024-03-15T10:30:00.000Z",
+      "updatedAt": "2024-03-16T14:15:00.000Z"
+    },
+    {
+      "id": 2,
+      "code": "OS-2024-0002",
+      "clientId": 2,
+      "vehicle": { "make": "Jeep", "model": "Compass", "year": 2020, "plate": "FGH2I34" },
+      "reportedIssue": "Revisão de 40.000 km",
+      "notes": "Aguardar aprovação do orçamento para troca de pneus.",
+      "status": "aguardando_aprovacao",
+      "services": [
+        { "description": "Revisão completa", "hours": 3, "rate": 160, "total": 480 }
+      ],
+      "parts": [
+        { "inventoryItemId": 1, "description": "Óleo 5W30 Sintético", "quantity": 5, "unitPrice": 65.9, "total": 329.5 },
+        { "inventoryItemId": 2, "description": "Filtro de ar Honda Civic", "quantity": 1, "unitPrice": 48.5, "total": 48.5 }
+      ],
+      "summary": { "labor": 480, "parts": 378, "discount": 0, "total": 858 },
+      "createdAt": "2024-04-02T09:00:00.000Z",
+      "updatedAt": "2024-04-02T09:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "code": "OS-2024-0003",
+      "clientId": 3,
+      "vehicle": { "make": "Fiat", "model": "Ducato", "year": 2019, "plate": "JKL3M45" },
+      "reportedIssue": "Troca de embreagem e revisão geral",
+      "notes": "Veículo ficará até sexta-feira.",
+      "status": "finalizada",
+      "services": [
+        { "description": "Substituição da embreagem", "hours": 5, "rate": 170, "total": 850 },
+        { "description": "Revisão de sistemas", "hours": 2, "rate": 170, "total": 340 }
+      ],
+      "parts": [
+        { "description": "Kit de embreagem Ducato", "quantity": 1, "unitPrice": 1350, "total": 1350 }
+      ],
+      "summary": { "labor": 1190, "parts": 1350, "discount": 150, "total": 2390 },
+      "createdAt": "2024-02-20T08:45:00.000Z",
+      "updatedAt": "2024-02-23T16:00:00.000Z"
+    }
+  ]
+}

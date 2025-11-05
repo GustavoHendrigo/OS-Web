@@ -1,0 +1,30 @@
+.clients {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.toolbar input {
+  flex: 1;
+}
+
+.form-grid.two-columns .full {
+  grid-column: 1 / -1;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .toolbar {
+    flex-direction: column;
+  }
+}

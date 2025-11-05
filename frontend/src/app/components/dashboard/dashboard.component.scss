@@ -1,0 +1,33 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-header h2 {
+  margin-bottom: 0.4rem;
+}
+
+.big {
+  font-size: 2.2rem;
+  display: block;
+  margin: 0.6rem 0;
+}
+
+.table tbody tr td:first-child a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
