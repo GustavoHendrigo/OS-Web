@@ -1,0 +1,36 @@
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.actions input {
+  min-width: 220px;
+}
+
+.error {
+  color: var(--danger);
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+}
+
+.low-stock {
+  background: rgba(220, 38, 38, 0.05);
+}
+
+.button-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}

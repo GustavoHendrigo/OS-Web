@@ -1,0 +1,75 @@
+<div class="card">
+  <header class="card-header">
+    <h2 class="section-title">Clientes</h2>
+    <div class="actions">
+      <input type="search" placeholder="Buscar clientes" [(ngModel)]="searchTerm" (ngModelChange)="loadClients()" />
+      <button class="button" type="button" (click)="toggleForm()">
+        {{ formVisible ? 'Fechar formulário' : 'Novo cliente' }}
+      </button>
+    </div>
+  </header>
+
+  <p *ngIf="error" class="error">{{ error }}</p>
+  <p *ngIf="loading">Carregando clientes...</p>
+
+  <table class="table" *ngIf="!loading && clients.length">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Contato</th>
+        <th>Veículo</th>
+        <th>Notas</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of clients">
+        <td>{{ client.name }}</td>
+        <td>
+          <div>{{ client.phone }}</div>
+          <div class="muted">{{ client.email }}</div>
+        </td>
+        <td>{{ client.vehicleInfo || '—' }}</td>
+        <td>{{ client.notes || '—' }}</td>
+        <td>
+          <button class="button secondary" type="button" (click)="toggleForm(client)">Editar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="!loading && !clients.length" class="empty">Nenhum cliente encontrado.</p>
+</div>
+
+<div class="card" *ngIf="formVisible">
+  <h3>{{ editingClient ? 'Editar cliente' : 'Cadastrar cliente' }}</h3>
+  <p *ngIf="saveError" class="error">{{ saveError }}</p>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-grid columns-2">
+      <label>
+        Nome completo
+        <input type="text" formControlName="name" placeholder="Nome e sobrenome" />
+      </label>
+      <label>
+        Telefone
+        <input type="tel" formControlName="phone" placeholder="(11) 99999-9999" />
+      </label>
+      <label>
+        E-mail
+        <input type="email" formControlName="email" placeholder="contato@cliente.com" />
+      </label>
+      <label>
+        Veículo principal
+        <input type="text" formControlName="vehicleInfo" placeholder="Marca / Modelo / Placa" />
+      </label>
+    </div>
+    <label>
+      Notas adicionais
+      <textarea rows="3" formControlName="notes"></textarea>
+    </label>
+    <div class="button-bar">
+      <button class="button" type="submit" [disabled]="saving">
+        {{ saving ? 'Salvando...' : 'Salvar cliente' }}
+      </button>
+    </div>
+  </form>
+</div>

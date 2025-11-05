@@ -1,0 +1,57 @@
+<div class="card" *ngIf="summary; else loadingState">
+  <h2 class="section-title">Status das Ordens de Serviço</h2>
+  <div class="status-grid">
+    <div class="status-card" *ngFor="let card of summary.statusCards">
+      <span>{{ formatStatus(card.status) }}</span>
+      <strong>{{ card.count }}</strong>
+      <p>Total faturado: {{ card.total | currency:'BRL':'symbol-narrow':'1.2-2' }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="summary?.recentOrders?.length">
+  <h3>Ordens recentes</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Cliente</th>
+        <th>Veículo</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Atualizado em</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of summary!.recentOrders">
+        <td><a [routerLink]="['/ordens-servico', order.id]">{{ order.code }}</a></td>
+        <td>{{ order.clientName }}</td>
+        <td>{{ order.vehicle }}</td>
+        <td><span class="badge info">{{ formatStatus(order.status) }}</span></td>
+        <td>{{ order.totalCost | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+        <td>{{ order.updatedAt | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card" *ngIf="summary?.pendingApprovals?.length">
+  <h3>Pendentes de aprovação</h3>
+  <p>Envie orçamento para o cliente e avance o status.</p>
+  <ul class="pending-list">
+    <li *ngFor="let order of summary!.pendingApprovals">
+      <div>
+        <strong>{{ order.code }} - {{ order.clientName }}</strong>
+        <p>{{ order.vehicle }} · Total: {{ order.totalCost | currency:'BRL':'symbol-narrow':'1.2-2' }}</p>
+      </div>
+      <a class="button secondary" [routerLink]="['/ordens-servico', order.id]">Visualizar</a>
+    </li>
+  </ul>
+</div>
+
+<ng-template #loadingState>
+  <div class="card">
+    <p *ngIf="loading">Carregando informações do painel...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+  </div>
+</ng-template>
