@@ -1,0 +1,224 @@
+:root {
+  color-scheme: light dark;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --color-primary: #0d47a1;
+  --color-secondary: #1565c0;
+  --color-light: #f5f5f5;
+  --color-dark: #212121;
+  --color-success: #2e7d32;
+  --color-warning: #f9a825;
+  --color-danger: #c62828;
+  --border-radius: 8px;
+}
+
+body {
+  margin: 0;
+  background: var(--color-light);
+  color: var(--color-dark);
+}
+
+app-root,
+app-login,
+app-dashboard,
+app-orders,
+app-order-detail,
+app-clients,
+app-inventory {
+  display: block;
+  min-height: 100vh;
+}
+
+header.topbar {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.8rem 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav.menu a {
+  color: white;
+  margin-right: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav.menu a.active {
+  text-decoration: underline;
+}
+
+main.content {
+  padding: 1.5rem;
+}
+
+.card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1rem 1.4rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.2rem;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.status-em_andamento {
+  background: rgba(21, 101, 192, 0.1);
+  color: var(--color-secondary);
+}
+
+.status-aguardando_aprovacao {
+  background: rgba(249, 168, 37, 0.15);
+  color: var(--color-warning);
+}
+
+.status-entregue,
+.status-concluido {
+  background: rgba(46, 125, 50, 0.15);
+  color: var(--color-success);
+}
+
+.status-cancelado {
+  background: rgba(198, 40, 40, 0.15);
+  color: var(--color-danger);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: var(--border-radius);
+  border: none;
+  background: var(--color-secondary);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.1s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn.secondary {
+  background: var(--color-success);
+}
+
+.btn.danger {
+  background: var(--color-danger);
+}
+
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.toolbar input,
+.toolbar select,
+form input,
+form textarea,
+form select {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius);
+  border: 1px solid #bbb;
+  font-size: 0.95rem;
+}
+
+form .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.badge {
+  background: var(--color-secondary);
+  color: white;
+  border-radius: 12px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.summary-item {
+  background: #fafafa;
+  border-radius: var(--border-radius);
+  padding: 0.75rem;
+}
+
+.summary-item h3 {
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+}
+
+.print-view {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+}
+
+.print-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media print {
+  header.topbar,
+  .toolbar,
+  .print-actions,
+  nav.menu,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+  .print-view {
+    box-shadow: none;
+    margin: 0;
+  }
+}
