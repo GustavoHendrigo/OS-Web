@@ -1,0 +1,35 @@
+.back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #1f3c88;
+  text-decoration: none;
+}
+
+.order-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-info h1 {
+  margin: 0;
+}
+
+.order-info p {
+  margin: 0.5rem 0 0;
+  color: #475569;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.meta span {
+  background: #e0e7ff;
+  color: #1f3c88;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+}

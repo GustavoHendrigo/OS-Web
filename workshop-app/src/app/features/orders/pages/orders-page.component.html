@@ -1,0 +1,42 @@
+<section class="orders">
+  <header class="orders__header">
+    <div>
+      <h1>Ordens de serviço</h1>
+      <p>Gerencie as ordens em andamento, aguardando aprovação e finalizadas.</p>
+    </div>
+    <form [formGroup]="filterForm" class="filters">
+      <input type="search" placeholder="Buscar por código, veículo ou descrição" formControlName="search" />
+      <select formControlName="status">
+        <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</option>
+      </select>
+    </form>
+  </header>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Cliente</th>
+        <th>Veículo</th>
+        <th>Resumo</th>
+        <th>Status</th>
+        <th>Prazo</th>
+        <th>Valor total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders()">
+        <td>{{ order.code }}</td>
+        <td>{{ order.clientName }}</td>
+        <td>{{ order.vehicle }}</td>
+        <td>{{ order.description }}</td>
+        <td><span [class]="statusLabels[order.status].class">{{ statusLabels[order.status].label }}</span></td>
+        <td>{{ order.promisedDate | date: 'shortDate' }}</td>
+        <td>{{ order.summary.total | currency: 'BRL' }}</td>
+        <td class="actions"><a [routerLink]="['/ordens', order.id]">Detalhes</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="empty" *ngIf="orders().length === 0">Nenhuma ordem encontrada.</p>
+</section>

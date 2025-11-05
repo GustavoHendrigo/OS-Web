@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f7fb;
+  color: #1f2933;
+}
+
+button {
+  font: inherit;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge--open {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.badge--in-progress {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge--waiting {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.badge--completed {
+  background: #dcfce7;
+  color: #15803d;
+}

@@ -1,0 +1,58 @@
+.orders {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.orders__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.orders__header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.orders__header p {
+  margin: 0.5rem 0 0;
+  color: #64748b;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filters input,
+.filters select {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5f5;
+  background: #fff;
+  min-width: 220px;
+}
+
+.actions a {
+  color: #1f3c88;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.empty {
+  text-align: center;
+  color: #94a3b8;
+}
+
+@media (max-width: 900px) {
+  .orders__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+}

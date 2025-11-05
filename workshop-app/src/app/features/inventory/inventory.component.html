@@ -1,0 +1,37 @@
+<section class="inventory">
+  <header class="inventory__header">
+    <div>
+      <h1>Estoque</h1>
+      <p>Controle de peças e insumos disponíveis na oficina.</p>
+    </div>
+    <form [formGroup]="filterForm" class="filters">
+      <input type="search" placeholder="Buscar por código, descrição ou fornecedor" formControlName="search" />
+    </form>
+  </header>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+        <th>Mínimo</th>
+        <th>Custo unitário</th>
+        <th>Localização</th>
+        <th>Fornecedor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items()" [class.low-stock]="item.quantity <= item.minQuantity">
+        <td>{{ item.code }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.minQuantity }}</td>
+        <td>{{ item.unitCost | currency: 'BRL' }}</td>
+        <td>{{ item.location }}</td>
+        <td>{{ item.supplier }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="empty" *ngIf="items().length === 0">Nenhum item encontrado.</p>
+</section>
