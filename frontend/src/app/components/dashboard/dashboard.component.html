@@ -1,0 +1,86 @@
+<section *ngIf="!loading(); else loadingTpl" class="dashboard">
+  <div class="status-grid">
+    <div class="status-card">
+      <h3>Ordens em andamento</h3>
+      <strong>{{ ordersByStatus()['em_andamento'] || 0 }}</strong>
+    </div>
+    <div class="status-card">
+      <h3>Aguardando aprovação</h3>
+      <strong>{{ ordersByStatus()['aguardando_aprovacao'] || 0 }}</strong>
+    </div>
+    <div class="status-card">
+      <h3>Concluídas</h3>
+      <strong>{{ ordersByStatus()['finalizada'] || 0 }}</strong>
+    </div>
+    <div class="status-card">
+      <h3>Entregues</h3>
+      <strong>{{ ordersByStatus()['entregue'] || 0 }}</strong>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Resumo financeiro</h2>
+      <p>Total faturado em ordens finalizadas</p>
+      <strong class="big">{{ formatMoney(totalRevenue()) }}</strong>
+      <a routerLink="/ordens-de-servico" class="outline">Ver ordens</a>
+    </div>
+    <div class="card">
+      <h2>Clientes ativos</h2>
+      <strong class="big">{{ clients().length }}</strong>
+      <a routerLink="/clientes" class="outline">Gerenciar clientes</a>
+    </div>
+    <div class="card">
+      <h2>Itens no estoque</h2>
+      <strong class="big">{{ inventory().length }}</strong>
+      <a routerLink="/estoque" class="outline">Gerenciar estoque</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2>Ordens recentes</h2>
+        <p>Resumo das últimas movimentações</p>
+      </div>
+      <a routerLink="/ordens-de-servico" class="outline">Ver todas</a>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Atualizado em</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders() | slice:0:5">
+          <td><a [routerLink]="['/ordens-de-servico', order.id]">{{ order.code }}</a></td>
+          <td>{{ order.client?.name }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'open': order.status === 'em_andamento',
+              'pending': order.status === 'aguardando_aprovacao',
+              'finished': order.status === 'finalizada',
+              'delivered': order.status === 'entregue'
+            }">{{ order.statusLabel }}</span>
+          </td>
+          <td>{{ formatMoney(order.summary.total) }}</td>
+          <td>{{ order.updatedAt | date:'short' }}</td>
+        </tr>
+        <tr *ngIf="orders().length === 0">
+          <td colspan="5">Nenhuma ordem cadastrada até o momento.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<ng-template #loadingTpl>
+  <div class="card">
+    <p>Carregando informações...</p>
+  </div>
+</ng-template>

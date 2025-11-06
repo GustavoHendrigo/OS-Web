@@ -1,0 +1,162 @@
+<section class="service-orders" *ngIf="!loading(); else loadingTpl">
+  <div class="toolbar">
+    <div class="filters">
+      <input type="search" placeholder="Pesquisar por código, cliente ou veículo" (input)="searchTerm.set($any($event.target).value)" />
+      <select (change)="statusFilter.set($any($event.target).value)">
+        <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</option>
+      </select>
+    </div>
+    <button *ngIf="authService.hasRole('admin')" (click)="toggleCreate()">
+      {{ showCreateForm() ? 'Cancelar' : 'Nova ordem de serviço' }}
+    </button>
+  </div>
+
+  <div class="card" *ngIf="showCreateForm()">
+    <h2>Cadastrar nova ordem</h2>
+    <form [formGroup]="orderForm" (ngSubmit)="submitOrder()" class="form-grid">
+      <div class="form-grid two-columns">
+        <label>
+          <span>Cliente</span>
+          <select formControlName="clientId">
+            <option value="0" disabled>Selecione o cliente</option>
+            <option *ngFor="let client of clients()" [value]="client.id">{{ client.name }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Status inicial</span>
+          <select formControlName="status">
+            <option value="aguardando_aprovacao">Aguardando aprovação</option>
+            <option value="em_andamento">Em andamento</option>
+            <option value="finalizada">Finalizada</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-grid two-columns" formGroupName="vehicle">
+        <label>
+          <span>Marca</span>
+          <input formControlName="make" placeholder="Ex: Ford" />
+        </label>
+        <label>
+          <span>Modelo</span>
+          <input formControlName="model" placeholder="Ex: Fiesta" />
+        </label>
+        <label>
+          <span>Ano</span>
+          <input type="number" formControlName="year" />
+        </label>
+        <label>
+          <span>Placa</span>
+          <input formControlName="plate" placeholder="ABC1D23" />
+        </label>
+      </div>
+
+      <label>
+        <span>Problema relatado</span>
+        <textarea rows="3" formControlName="reportedIssue"></textarea>
+      </label>
+
+      <label>
+        <span>Observações internas</span>
+        <textarea rows="2" formControlName="notes"></textarea>
+      </label>
+
+      <div class="section">
+        <div class="section-header">
+          <h3>Mão de obra</h3>
+          <button type="button" class="outline" (click)="addService()">Adicionar serviço</button>
+        </div>
+        <div formArrayName="services" class="dynamic-list">
+          <div class="dynamic-item" *ngFor="let service of services.controls; let i = index" [formGroupName]="i">
+            <input formControlName="description" placeholder="Descrição do serviço" />
+            <input type="number" step="0.25" formControlName="hours" placeholder="Horas" />
+            <input type="number" step="0.5" formControlName="rate" placeholder="Valor hora" />
+            <button type="button" class="outline" (click)="removeService(i)" *ngIf="services.length > 1">Remover</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h3>Peças</h3>
+          <button type="button" class="outline" (click)="addPart()">Adicionar peça</button>
+        </div>
+        <div formArrayName="parts" class="dynamic-list">
+          <div class="dynamic-item" *ngFor="let part of parts.controls; let i = index" [formGroupName]="i">
+            <select formControlName="inventoryItemId" (change)="onInventorySelection(i)">
+              <option [ngValue]="null">Sem vínculo com estoque</option>
+              <option *ngFor="let item of inventory()" [ngValue]="item.id">{{ item.name }} ({{ item.quantity }} un.)</option>
+            </select>
+            <input formControlName="description" placeholder="Descrição" />
+            <input type="number" step="1" min="1" formControlName="quantity" placeholder="Qtd" />
+            <input type="number" step="0.01" min="0" formControlName="unitPrice" placeholder="Valor unitário" />
+            <button type="button" class="outline" (click)="removePart(i)">Remover</button>
+          </div>
+        </div>
+      </div>
+
+      <label>
+        <span>Desconto</span>
+        <input type="number" min="0" formControlName="discount" />
+      </label>
+
+      <button type="submit">Salvar ordem de serviço</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Ordens cadastradas</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Cliente</th>
+          <th>Veículo</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders()">
+          <td><a [routerLink]="['/ordens-de-servico', order.id]">{{ order.code }}</a></td>
+          <td>{{ order.client?.name }}</td>
+          <td>{{ order.vehicle.make }} {{ order.vehicle.model }} - {{ order.vehicle.plate }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'open': order.status === 'em_andamento',
+              'pending': order.status === 'aguardando_aprovacao',
+              'finished': order.status === 'finalizada',
+              'delivered': order.status === 'entregue'
+            }">{{ order.statusLabel }}</span>
+          </td>
+          <td>{{ formatMoney(order.summary.total) }}</td>
+          <td>
+            <div class="table-actions">
+              <select
+                *ngIf="authService.hasRole('admin')"
+                [value]="order.status"
+                (change)="updateStatus(order, $any($event.target).value)"
+              >
+                <option value="aguardando_aprovacao">Aguardando aprovação</option>
+                <option value="em_andamento">Em andamento</option>
+                <option value="finalizada">Finalizada</option>
+                <option value="entregue">Entregue</option>
+              </select>
+              <a class="outline" [routerLink]="['/ordens-de-servico', order.id]">Resumo</a>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="filteredOrders().length === 0">
+          <td colspan="6">Nenhuma ordem localizada.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<ng-template #loadingTpl>
+  <div class="card">
+    <p>Carregando ordens de serviço...</p>
+  </div>
+</ng-template>

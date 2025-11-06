@@ -1,0 +1,72 @@
+<section class="clients" *ngIf="!loading(); else loadingTpl">
+  <div class="toolbar">
+    <input type="search" placeholder="Buscar cliente" (input)="searchTerm.set($any($event.target).value)" />
+    <button *ngIf="authService.hasRole('admin')" (click)="startCreate()">Novo cliente</button>
+  </div>
+
+  <div class="card" *ngIf="authService.hasRole('admin')">
+    <h2>{{ editingClientId() ? 'Editar cliente' : 'Cadastrar cliente' }}</h2>
+    <form [formGroup]="clientForm" (ngSubmit)="submit()" class="form-grid two-columns">
+      <label>
+        <span>Nome</span>
+        <input formControlName="name" />
+      </label>
+      <label>
+        <span>Telefone</span>
+        <input formControlName="phone" />
+      </label>
+      <label>
+        <span>Email</span>
+        <input formControlName="email" />
+      </label>
+      <label>
+        <span>Documento</span>
+        <input formControlName="document" />
+      </label>
+      <label class="full">
+        <span>Veículo principal</span>
+        <input formControlName="vehicle" />
+      </label>
+      <button type="submit" class="full">{{ editingClientId() ? 'Salvar alterações' : 'Adicionar cliente' }}</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Clientes cadastrados</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Contato</th>
+          <th>Veículo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of filteredClients()">
+          <td>{{ client.name }}</td>
+          <td>
+            <div>{{ client.phone }}</div>
+            <small>{{ client.email }}</small>
+          </td>
+          <td>{{ client.vehicle }}</td>
+          <td>
+            <div class="table-actions" *ngIf="authService.hasRole('admin')">
+              <button type="button" class="outline" (click)="editClient(client)">Editar</button>
+              <button type="button" class="secondary" (click)="remove(client)">Excluir</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="filteredClients().length === 0">
+          <td colspan="4">Nenhum cliente encontrado.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<ng-template #loadingTpl>
+  <div class="card">
+    <p>Carregando clientes...</p>
+  </div>
+</ng-template>

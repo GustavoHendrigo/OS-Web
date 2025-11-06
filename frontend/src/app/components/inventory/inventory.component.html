@@ -1,0 +1,82 @@
+<section class="inventory" *ngIf="!loading(); else loadingTpl">
+  <div class="toolbar">
+    <input type="search" placeholder="Buscar peça" (input)="searchTerm.set($any($event.target).value)" />
+    <button *ngIf="authService.hasRole('admin')" (click)="startCreate()">Novo item</button>
+  </div>
+
+  <div class="card" *ngIf="authService.hasRole('admin')">
+    <h2>{{ editingItemId() ? 'Editar item' : 'Adicionar item ao estoque' }}</h2>
+    <form [formGroup]="itemForm" (ngSubmit)="submit()" class="form-grid two-columns">
+      <label>
+        <span>Descrição</span>
+        <input formControlName="name" />
+      </label>
+      <label>
+        <span>SKU / Código interno</span>
+        <input formControlName="sku" />
+      </label>
+      <label>
+        <span>Quantidade</span>
+        <input type="number" min="0" formControlName="quantity" />
+      </label>
+      <label>
+        <span>Estoque mínimo</span>
+        <input type="number" min="0" formControlName="minimumQuantity" />
+      </label>
+      <label>
+        <span>Valor unitário</span>
+        <input type="number" min="0" step="0.01" formControlName="unitPrice" />
+      </label>
+      <label>
+        <span>Localização</span>
+        <input formControlName="location" />
+      </label>
+      <label class="full">
+        <span>Fornecedor</span>
+        <input formControlName="supplier" />
+      </label>
+      <button type="submit" class="full">{{ editingItemId() ? 'Salvar alterações' : 'Cadastrar item' }}</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Itens em estoque</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantidade</th>
+          <th>Valor unitário</th>
+          <th>Fornecedor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of filteredItems()">
+          <td>
+            <div>{{ item.name }}</div>
+            <small>SKU: {{ item.sku }} | Local: {{ item.location || 'Não informado' }}</small>
+          </td>
+          <td [ngClass]="{ 'low-stock': item.quantity <= (item.minimumQuantity || 0) }">{{ item.quantity }}</td>
+          <td>{{ formatMoney(item.unitPrice || 0) }}</td>
+          <td>{{ item.supplier || '—' }}</td>
+          <td>
+            <div class="table-actions" *ngIf="authService.hasRole('admin')">
+              <button type="button" class="outline" (click)="edit(item)">Editar</button>
+              <button type="button" class="secondary" (click)="remove(item)">Remover</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="filteredItems().length === 0">
+          <td colspan="5">Nenhum item encontrado.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<ng-template #loadingTpl>
+  <div class="card">
+    <p>Carregando estoque...</p>
+  </div>
+</ng-template>

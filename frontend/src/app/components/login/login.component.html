@@ -1,0 +1,30 @@
+<div class="login-page">
+  <div class="login-card card">
+    <h1>OS Web</h1>
+    <p>Gestão completa de ordens de serviço para oficinas mecânicas.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" class="form-grid">
+      <label>
+        <span>Usuário</span>
+        <input type="text" formControlName="username" placeholder="admin ou mecanico" />
+      </label>
+      <label>
+        <span>Senha</span>
+        <input type="password" formControlName="password" placeholder="Digite sua senha" />
+      </label>
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Entrando...' : 'Entrar no sistema' }}
+      </button>
+    </form>
+
+    <div class="alert" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="credentials-hint">
+      <strong>Usuários de demonstração</strong>
+      <ul>
+        <li><code>admin / admin123</code> – acesso total</li>
+        <li><code>mecanico / mecanico123</code> – acesso restrito às ordens</li>
+      </ul>
+    </div>
+  </div>
+</div>
