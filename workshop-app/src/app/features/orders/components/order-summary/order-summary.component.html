@@ -1,0 +1,79 @@
+<section class="summary printable-area" *ngIf="order">
+  <header>
+    <div>
+      <h2>{{ order.code }} - {{ order.vehicle }}</h2>
+      <p>{{ order.description }}</p>
+      <small>Emitida em {{ order.createdAt | date: 'short' }}</small>
+    </div>
+    <button type="button" (click)="print()">Imprimir</button>
+  </header>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>Mão de obra</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Horas</th>
+            <th>Valor hora</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let labor of order.labor">
+            <td>{{ labor.description }}</td>
+            <td>{{ labor.hours }}</td>
+            <td>{{ labor.rate | currency: 'BRL' }}</td>
+            <td>{{ labor.hours * labor.rate | currency: 'BRL' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h3>Peças</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Qtd.</th>
+            <th>Unitário</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let part of order.parts">
+            <td>{{ part.description }}</td>
+            <td>{{ part.quantity }}</td>
+            <td>{{ part.unitPrice | currency: 'BRL' }}</td>
+            <td>{{ part.quantity * part.unitPrice | currency: 'BRL' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="totals">
+    <div>
+      <span>Mão de obra:</span>
+      <strong>{{ order.summary.laborTotal | currency: 'BRL' }}</strong>
+    </div>
+    <div>
+      <span>Peças:</span>
+      <strong>{{ order.summary.partsTotal | currency: 'BRL' }}</strong>
+    </div>
+    <div>
+      <span>Taxas adicionais:</span>
+      <strong>{{ order.summary.additionalFees | currency: 'BRL' }}</strong>
+    </div>
+    <div>
+      <span>Descontos:</span>
+      <strong>-{{ order.summary.discounts | currency: 'BRL' }}</strong>
+    </div>
+    <div class="totals__grand">
+      <span>Total da ordem:</span>
+      <strong>{{ order.summary.total | currency: 'BRL' }}</strong>
+    </div>
+  </footer>
+</section>

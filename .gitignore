@@ -1,0 +1,8 @@
+node_modules/
+dist/
+workshop-app/dist/
+workshop-app/.angular/
+workshop-app/.cache/
+server/data/
+server/node_modules/
+.DS_Store
