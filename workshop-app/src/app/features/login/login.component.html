@@ -1,0 +1,29 @@
+<div class="login">
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <h2>Bem-vindo ao PlanuCenter</h2>
+    <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+    <div class="field">
+      <label>Usuário</label>
+      <input formControlName="username" placeholder="Informe o usuário" />
+      <small *ngIf="form.get('username')?.touched && form.get('username')?.invalid">Campo obrigatório.</small>
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" formControlName="password" placeholder="Informe a senha" />
+      <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid">Campo obrigatório.</small>
+    </div>
+    <button type="submit">Acessar</button>
+  </form>
+
+  <aside class="presets">
+    <h3>Usuários pré-definidos</h3>
+    <ul>
+      <li *ngFor="let preset of presetUsers">
+        <strong>{{ preset.description }}</strong>
+        <button type="button" (click)="fillPreset(preset.username, preset.password)">
+          Usar {{ preset.username }}
+        </button>
+      </li>
+    </ul>
+  </aside>
+</div>

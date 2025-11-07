@@ -1,0 +1,88 @@
+<section class="inventory">
+  <header class="inventory__header">
+    <div>
+      <h1>Estoque</h1>
+      <p>Controle de peças e insumos disponíveis na oficina.</p>
+    </div>
+    <div class="inventory__header-actions">
+      <form [formGroup]="filterForm" class="filters">
+        <input type="search" placeholder="Buscar por código, descrição ou fornecedor" formControlName="search" />
+      </form>
+      <button type="button" *ngIf="isAdmin()" (click)="openCreate()">Novo item</button>
+    </div>
+  </header>
+
+  <section class="form-card" *ngIf="isAdmin() && isFormVisible()">
+    <header>
+      <h2>{{ editingItem() ? 'Editar item' : 'Cadastrar item' }}</h2>
+      <button type="button" class="secondary" (click)="cancelForm()">Fechar</button>
+    </header>
+    <form [formGroup]="itemForm" (ngSubmit)="saveItem()">
+      <div class="form-grid">
+        <label>
+          <span>Código *</span>
+          <input type="text" formControlName="code" required />
+        </label>
+        <label class="wide">
+          <span>Descrição *</span>
+          <input type="text" formControlName="description" required />
+        </label>
+        <label>
+          <span>Quantidade</span>
+          <input type="number" formControlName="quantity" min="0" />
+        </label>
+        <label>
+          <span>Estoque mínimo</span>
+          <input type="number" formControlName="minQuantity" min="0" />
+        </label>
+        <label>
+          <span>Custo unitário</span>
+          <input type="number" formControlName="unitCost" min="0" step="0.01" />
+        </label>
+        <label>
+          <span>Localização</span>
+          <input type="text" formControlName="location" />
+        </label>
+        <label>
+          <span>Fornecedor</span>
+          <input type="text" formControlName="supplier" />
+        </label>
+      </div>
+      <footer>
+        <button type="submit">Salvar</button>
+        <button type="button" class="secondary" (click)="cancelForm()">Cancelar</button>
+      </footer>
+    </form>
+  </section>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+        <th>Mínimo</th>
+        <th>Custo unitário</th>
+        <th>Localização</th>
+        <th>Fornecedor</th>
+        <th *ngIf="isAdmin()"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items()" [class.low-stock]="item.quantity <= item.minQuantity">
+        <td>{{ item.code }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.minQuantity }}</td>
+        <td>{{ item.unitCost | currency: 'BRL' }}</td>
+        <td>{{ item.location || '-' }}</td>
+        <td>{{ item.supplier || '-' }}</td>
+        <td class="actions" *ngIf="isAdmin()">
+          <button type="button" (click)="openEdit(item)">Editar</button>
+          <button type="button" class="danger" (click)="deleteItem(item)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="empty" *ngIf="items().length === 0">Nenhum item encontrado.</p>
+</section>

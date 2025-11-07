@@ -1,0 +1,82 @@
+<section class="clients">
+  <header class="clients__header">
+    <div>
+      <h1>Clientes</h1>
+      <p>Gerencie o cadastro de clientes e mantenha os dados atualizados.</p>
+    </div>
+    <div class="clients__header-actions">
+      <form [formGroup]="filterForm" class="filters">
+        <input type="search" placeholder="Buscar por nome, contato ou veículo" formControlName="search" />
+      </form>
+      <button type="button" *ngIf="isAdmin()" (click)="openCreate()">Novo cliente</button>
+    </div>
+  </header>
+
+  <section class="form-card" *ngIf="isAdmin() && isFormVisible()">
+    <header>
+      <h2>{{ editingClient() ? 'Editar cliente' : 'Cadastrar cliente' }}</h2>
+      <button type="button" class="secondary" (click)="cancelForm()">Fechar</button>
+    </header>
+    <form [formGroup]="clientForm" (ngSubmit)="saveClient()">
+      <div class="form-grid">
+        <label>
+          <span>Nome *</span>
+          <input type="text" formControlName="name" required />
+        </label>
+        <label>
+          <span>Telefone</span>
+          <input type="text" formControlName="phone" />
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" formControlName="email" />
+        </label>
+        <label>
+          <span>Documento</span>
+          <input type="text" formControlName="document" />
+        </label>
+        <label class="wide">
+          <span>Veículos</span>
+          <input type="text" formControlName="vehicles" placeholder="Modelos ou placas atendidos" />
+        </label>
+        <label class="wide">
+          <span>Observações</span>
+          <textarea formControlName="notes" rows="3"></textarea>
+        </label>
+      </div>
+      <footer>
+        <button type="submit">Salvar</button>
+        <button type="button" class="secondary" (click)="cancelForm()">Cancelar</button>
+      </footer>
+    </form>
+  </section>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Contato</th>
+        <th>Email</th>
+        <th>Documento</th>
+        <th>Veículos</th>
+        <th>Observações</th>
+        <th *ngIf="isAdmin()"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of clients()">
+        <td>{{ client.name }}</td>
+        <td>{{ client.phone || '-' }}</td>
+        <td>{{ client.email || '-' }}</td>
+        <td>{{ client.document || '-' }}</td>
+        <td>{{ client.vehicles || '-' }}</td>
+        <td>{{ client.notes || '-' }}</td>
+        <td class="actions" *ngIf="isAdmin()">
+          <button type="button" (click)="openEdit(client)">Editar</button>
+          <button type="button" class="danger" (click)="deleteClient(client)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="empty" *ngIf="clients().length === 0">Nenhum cliente encontrado.</p>
+</section>
