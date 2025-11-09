@@ -83,3 +83,14 @@ npm test
 ```
 
 > Observação: a execução dos testes e builds depende da instalação das dependências via `npm install`.
+
+## Implantação na Render
+
+Para hospedar todo o projeto em um único serviço Web no [Render](https://render.com/):
+
+1. Defina o diretório raiz do serviço como a raiz deste repositório (`OS-Web`).
+2. Use o comando de build `npm run build` (ele instala o frontend e o backend e gera os arquivos estáticos em `server/public/`).
+3. Use o comando de start `npm run start` para iniciar a API Express que também serve os arquivos estáticos gerados.
+
+Esses comandos utilizam o `package.json` na raiz para instalar automaticamente as dependências dos diretórios `workshop-app/` e `server/`.
+

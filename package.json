@@ -1,0 +1,11 @@
+{
+  "name": "os-web",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix workshop-app && npm install --prefix server",
+    "build": "npm run build --prefix workshop-app",
+    "start": "npm run start --prefix server",
+    "start:frontend": "npm run start --prefix workshop-app",
+    "start:server": "npm run start --prefix server"
+  }
+}
