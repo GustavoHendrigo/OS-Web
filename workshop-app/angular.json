@@ -67,5 +67,8 @@
       }
     }
   },
-  "defaultProject": "planu-center"
+  "defaultProject": "planu-center",
+  "cli": {
+    "analytics": false
+  }
 }

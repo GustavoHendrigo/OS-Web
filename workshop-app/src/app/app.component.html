@@ -2,7 +2,7 @@
   <header class="topbar">
     <h1>PlanuCenter</h1>
     <div class="user-info">
-      <span class="role" *ngIf="userRole">Perfil: {{ userRole | uppercase }}</span>
+      <span class="role" *ngIf="userRole">Perfil: {{ userRole }}</span>
       <button type="button" (click)="logout()">Sair</button>
     </div>
   </header>
