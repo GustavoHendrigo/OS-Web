@@ -1,0 +1,122 @@
+<section class="orders">
+  <header class="orders__header">
+    <div>
+      <h1>Ordens de serviço</h1>
+      <p>Gerencie as ordens em andamento, aguardando aprovação e finalizadas.</p>
+    </div>
+    <div class="orders__header-actions">
+      <form [formGroup]="filterForm" class="filters">
+        <input type="search" placeholder="Buscar por código, veículo ou descrição" formControlName="search" />
+        <select formControlName="status">
+          <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </form>
+      <button type="button" *ngIf="isAdmin()" (click)="openCreate()">Nova OS</button>
+    </div>
+  </header>
+
+  <section class="form-card" *ngIf="isAdmin() && isFormVisible()">
+    <header>
+      <h2>{{ editingOrder() ? 'Editar ordem de serviço' : 'Cadastrar ordem de serviço' }}</h2>
+      <button type="button" class="secondary" (click)="cancelForm()">Fechar</button>
+    </header>
+    <form [formGroup]="orderForm" (ngSubmit)="saveOrder()">
+      <div class="form-grid">
+        <label>
+          <span>Código *</span>
+          <input type="text" formControlName="code" required />
+        </label>
+        <label>
+          <span>Cliente *</span>
+          <select formControlName="clientId" required>
+            <option [ngValue]="null" disabled>Selecione um cliente</option>
+            <option *ngFor="let client of clients()" [value]="client.id">{{ client.name }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Veículo *</span>
+          <input type="text" formControlName="vehicle" required />
+        </label>
+        <label>
+          <span>Status *</span>
+          <select formControlName="status">
+            <option *ngFor="let option of orderStatusOptions" [value]="option.value">{{ option.label }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Data prometida</span>
+          <input type="date" formControlName="promisedDate" />
+        </label>
+        <label class="wide">
+          <span>Descrição *</span>
+          <textarea formControlName="description" rows="3" required></textarea>
+        </label>
+        <label>
+          <span>Mão de obra (R$)</span>
+          <input type="number" min="0" step="0.01" formControlName="laborTotal" />
+        </label>
+        <label>
+          <span>Peças (R$)</span>
+          <input type="number" min="0" step="0.01" formControlName="partsTotal" />
+        </label>
+        <label>
+          <span>Taxas adicionais (R$)</span>
+          <input type="number" min="0" step="0.01" formControlName="additionalFees" />
+        </label>
+        <label>
+          <span>Descontos (R$)</span>
+          <input type="number" min="0" step="0.01" formControlName="discounts" />
+        </label>
+        <label>
+          <span>Total calculado</span>
+          <input type="number" formControlName="total" readonly />
+        </label>
+        <label class="wide">
+          <span>Observações</span>
+          <textarea formControlName="notes" rows="3"></textarea>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" formControlName="approvedByClient" />
+          <span>Orçamento aprovado pelo cliente</span>
+        </label>
+      </div>
+      <footer>
+        <button type="submit">Salvar OS</button>
+        <button type="button" class="secondary" (click)="cancelForm()">Cancelar</button>
+      </footer>
+    </form>
+  </section>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Cliente</th>
+        <th>Veículo</th>
+        <th>Resumo</th>
+        <th>Status</th>
+        <th>Prazo</th>
+        <th>Valor total</th>
+        <th></th>
+        <th *ngIf="isAdmin()"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders()">
+        <td>{{ order.code }}</td>
+        <td>{{ order.clientName }}</td>
+        <td>{{ order.vehicle }}</td>
+        <td>{{ order.description }}</td>
+        <td><span [class]="statusLabels[order.status].class">{{ statusLabels[order.status].label }}</span></td>
+        <td>{{ order.promisedDate | date: 'shortDate' }}</td>
+        <td>{{ order.summary.total | currency: 'BRL' }}</td>
+        <td class="actions"><a [routerLink]="['/ordens', order.id]">Detalhes</a></td>
+        <td class="actions" *ngIf="isAdmin()">
+          <button type="button" (click)="openEdit(order)">Editar</button>
+          <button type="button" class="danger" (click)="deleteOrder(order)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="empty" *ngIf="orders().length === 0">Nenhuma ordem encontrada.</p>
+</section>
