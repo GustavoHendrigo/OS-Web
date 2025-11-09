@@ -5,4 +5,6 @@ workshop-app/.angular/
 workshop-app/.cache/
 server/data/
 server/node_modules/
+server/public/*
+!server/public/.gitkeep
 .DS_Store
