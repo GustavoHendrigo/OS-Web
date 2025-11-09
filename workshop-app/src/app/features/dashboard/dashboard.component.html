@@ -1,0 +1,71 @@
+<section class="dashboard">
+  <div class="cards">
+    <div class="card">
+      <span class="card-label">Ordens abertas</span>
+      <strong>{{ countByStatus('aberta') }}</strong>
+    </div>
+    <div class="card">
+      <span class="card-label">Em andamento</span>
+      <strong>{{ countByStatus('em_andamento') }}</strong>
+    </div>
+    <div class="card">
+      <span class="card-label">Aguardando aprovação</span>
+      <strong>{{ countByStatus('aguardando_aprovacao') }}</strong>
+    </div>
+    <div class="card">
+      <span class="card-label">Entregues</span>
+      <strong>{{ countByStatus('entregue') }}</strong>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <header class="panel__header">
+        <h2>Ordens recentes</h2>
+        <a routerLink="/ordens">ver todas</a>
+      </header>
+      <ul class="order-list">
+        <li *ngFor="let order of orders() | slice:0:5">
+          <div>
+            <strong>{{ order.code }}</strong>
+            <p>{{ order.description }}</p>
+            <small>Prazo: {{ order.promisedDate | date: 'shortDate' }}</small>
+          </div>
+          <span [class]="statusLabels[order.status].class">{{ statusLabels[order.status].label }}</span>
+        </li>
+      </ul>
+      <p class="empty" *ngIf="orders().length === 0">Nenhuma ordem registrada.</p>
+    </div>
+
+    <div class="panel">
+      <header class="panel__header">
+        <h2>Clientes ativos</h2>
+        <a routerLink="/clientes">ver todos</a>
+      </header>
+      <ul class="client-list">
+        <li *ngFor="let client of clients() | slice:0:5">
+          <strong>{{ client.name }}</strong>
+          <span>{{ client.vehicles || 'Sem veículo cadastrado' }}</span>
+        </li>
+      </ul>
+      <p class="empty" *ngIf="clients().length === 0">Nenhum cliente registrado.</p>
+    </div>
+
+    <div class="panel">
+      <header class="panel__header">
+        <h2>Estoque crítico</h2>
+        <a routerLink="/estoque">ver estoque</a>
+      </header>
+      <ul class="inventory-list">
+        <li *ngFor="let item of criticalItems | slice:0:5">
+          <div>
+            <strong>{{ item.description }}</strong>
+            <small>Código: {{ item.code }}</small>
+          </div>
+          <span class="quantity">{{ item.quantity }} un.</span>
+        </li>
+      </ul>
+      <p class="empty" *ngIf="criticalItems.length === 0">Nenhum item crítico.</p>
+    </div>
+  </div>
+</section>

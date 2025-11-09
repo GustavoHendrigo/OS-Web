@@ -1,0 +1,23 @@
+<div class="layout" *ngIf="isAuthenticated; else auth">
+  <header class="topbar">
+    <h1>PlanuCenter</h1>
+    <div class="user-info">
+      <span class="role" *ngIf="userRole">Perfil: {{ userRole }}</span>
+      <button type="button" (click)="logout()">Sair</button>
+    </div>
+  </header>
+  <div class="content">
+    <nav class="sidebar">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Painel</a>
+      <a routerLink="/ordens" routerLinkActive="active">Ordens de serviço</a>
+      <a *ngIf="isAdmin" routerLink="/clientes" routerLinkActive="active">Clientes</a>
+      <a *ngIf="isAdmin" routerLink="/estoque" routerLinkActive="active">Estoque</a>
+    </nav>
+    <main class="main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+<ng-template #auth>
+  <router-outlet></router-outlet>
+</ng-template>
