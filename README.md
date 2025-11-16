@@ -84,13 +84,24 @@ npm test
 
 > Observação: a execução dos testes e builds depende da instalação das dependências via `npm install`.
 
-## Implantação na Render
+## Implantação na Railway
 
-Para hospedar todo o projeto em um único serviço Web no [Render](https://render.com/):
+O repositório já está preparado para ser implantado como um único serviço Web no [Railway](https://railway.app/). A plataforma executa os scripts declarados na raiz (`package.json`):
 
-1. Defina o diretório raiz do serviço como a raiz deste repositório (`OS-Web`).
-2. Use o comando de build `npm run build` (ele instala o frontend e o backend e gera os arquivos estáticos em `server/public/`).
-3. Use o comando de start `npm run start` para iniciar a API Express que também serve os arquivos estáticos gerados.
+1. **Build command**: `npm run build`. O Angular gera o frontend diretamente em `server/public/`, permitindo que o Express sirva os arquivos estáticos.
+2. **Start command**: `npm start`. Esse script recompila o frontend (garantindo que o diretório `server/public/` exista) e, em seguida, sobe a API Express.
 
-Esses comandos utilizam o `package.json` na raiz para instalar automaticamente as dependências dos diretórios `workshop-app/` e `server/`.
+### Variáveis de ambiente úteis
+
+- `PORT`: é definida automaticamente pela Railway, mas pode ser sobrescrita localmente.
+- `CLIENT_ORIGIN`: lista (separada por vírgulas) de domínios autorizados para CORS. Deixe em branco quando o frontend for servido pelo próprio Express (caso do deploy no Railway).
+
+Com essa configuração o fluxo de deploy na Railway é:
+
+1. Criar um novo serviço “Web Service” apontando para este repositório.
+2. Confirmar os comandos de build e start acima ou sobrescrevê-los manualmente nas configurações da Railway.
+3. Definir as variáveis de ambiente desejadas (opcional).
+4. Deployar. O servidor Express subirá automaticamente na porta informada pela Railway e servirá a API e o frontend Angular pela mesma URL.
+
+> Observação: os scripts de `postinstall` continuam garantindo que as dependências de `workshop-app/` e `server/` sejam instaladas automaticamente durante o build.
 
