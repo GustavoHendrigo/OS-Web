@@ -15,6 +15,12 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+const cors = require('cors');
+const options = {
+  origin: 'https://os-web-f7dk.onrender.com' // O URL do seu Angular no Render
+};
+app.use(cors(options));
+
 async function initializeDatabase() {
   await runQuery('PRAGMA foreign_keys = ON');
 
