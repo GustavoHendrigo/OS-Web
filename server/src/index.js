@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { allQuery, getQuery, runQuery } from './database.js';
@@ -10,16 +11,27 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
+const staticAssetsPath = path.resolve(__dirname, '../public');
 
-app.use(cors());
+const allowedOrigins = (process.env.CLIENT_ORIGIN ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = allowedOrigins.length
+  ? {
+      origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error('Origin not allowed by CORS'));
+      }
+    }
+  : undefined;
+
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(morgan('dev'));
-
-const cors = require('cors');
-const options = {
-  origin: 'https://os-web-f7dk.onrender.com' // O URL do seu Angular no Render
-};
-app.use(cors(options));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 async function initializeDatabase() {
   await runQuery('PRAGMA foreign_keys = ON');
@@ -720,7 +732,21 @@ app.delete('/api/inventory/:id', async (req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname, '../public')));
+if (fs.existsSync(staticAssetsPath)) {
+  app.use(express.static(staticAssetsPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+      return next();
+    }
+
+    const indexFile = path.join(staticAssetsPath, 'index.html');
+    if (fs.existsSync(indexFile)) {
+      return res.sendFile(indexFile);
+    }
+
+    return res.status(404).send('Aplicação cliente não foi construída.');
+  });
+}
 
 initializeDatabase()
   .then(() => {
